@@ -21,7 +21,7 @@ const Content = ({ gists }: Props) => {
                         <Badge key={i} color="#4118C9" text={g.files[k].language} />
                     ))}
                 </BadgesWrapper>
-                <FileViewer files={g.files} />}
+                <FileViewer files={g.files} />
                 <Forks gistId={g.id} />
             </Card>))}
     </>
