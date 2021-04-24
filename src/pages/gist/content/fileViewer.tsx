@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { CopyBlock, dracula } from "react-code-blocks";
-import { GistFile } from "types/github";
+import { CodeBlock, dracula } from "react-code-blocks";
 import styled from "styled-components";
+import { Switch, FormControlLabel } from '@material-ui/core';
+import { GistFile } from "types/github";
+
 
 interface Props {
     files: GistFile
@@ -19,6 +21,7 @@ const StyledDiv = styled.div`
 
 const FileViewer = ({ files }: Props) => {
     const [filesContent, setFilesContent] = useState<File[]>([]);
+    const [showFiles, setShowFiles] = useState<boolean[]>([]);
 
     useEffect(() => {
         filesContent.length === 0 && Object.keys(files).map(async f => {
@@ -28,14 +31,40 @@ const FileViewer = ({ files }: Props) => {
         })
     }, [])
 
+    const handleChange = (event: any) => {
+        const states = [...showFiles];
+        states[parseInt(event.target.name)] = !states[parseInt(event.target.name)]
+        setShowFiles(states)
+    }
+
+    const ViewerWrapper = () => {
+        return filesContent.map((c, index) => {
+            return <div>
+                <FormControlLabel
+                    key={index}
+                    control={
+                        <Switch
+                            checked={(showFiles[index]) || false}
+                            onChange={handleChange}
+                            name={`${index}`}
+                            color="primary"
+                            key={index}
+                        />
+                    }
+                    label="Primary"
+                />
+                {showFiles[index] && <CodeBlock
+                    text={c.content}
+                    language={c.language}
+                    showLineNumbers={true}
+                    theme={dracula} />}
+            </div>
+        }
+        )
+    }
+
     return <StyledDiv>
-        {filesContent.map(c => (<CopyBlock
-            text={c.content}
-            language={c.language}
-            showLineNumbers={true}
-            wrapLines
-            theme={dracula}
-        />))}
+        {ViewerWrapper()}
     </StyledDiv>
 
 }
