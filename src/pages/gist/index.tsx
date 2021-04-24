@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Alert } from "@material-ui/lab";
 import { Search } from "components";
 import { GithubGistAPI } from "api";
 import { Gist } from "types/github";
@@ -26,29 +27,39 @@ const ContentContainer = styled.div`
 const GistView = () => {
     const [gists, setGists] = useState<Gist[]>([]);
     const [user, setUser] = useState<string>();
+    const [error, setError] = useState<string>('');
 
     const fetchUser = async (user: string) => {
         const api = new GithubGistAPI();
-        const { status, data } = await api.getGistByUser(user);
-        if (status === 200) {
-            setGists(data)
+        try {
+            const { status, data } = await api.getGistByUser(user);
+            if (status === 200) {
+                setGists(data)
+            }
+        } catch (error) {
+            setError(error.message)
         }
     }
-    
+
     useEffect(() => {
-        if (user) fetchUser(user);
+        if (user) {
+            setGists([])
+            setError('')
+            fetchUser(user)
+        };
     }, [user])
 
 
-    const onSearh = (value: string) => {
+    const onSearch = (value: string) => {
         setUser(value)
     }
     return <Layout>
         <Header> Gist Viewer </Header>
         <ContentContainer>
-            <Search onClick={onSearh} />
-            <Content gists={gists}/>
+            <Search onClick={onSearch} />
+            <Content gists={gists} />
         </ContentContainer>
+        {error && <Alert severity="error">{error}</Alert>}
     </Layout>
 }
 

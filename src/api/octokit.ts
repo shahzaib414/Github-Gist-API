@@ -18,20 +18,7 @@ class OctokitService {
         });
 
         const { status, data } = result
-
-        if (status === 304) {
-            // Todo: Throw Error
-        }
-
-        if (status === 404) {
-            // Todo: Throw Error
-        }
-        if (status === 403) {
-            // Todo: Throw Error
-        }
-        if (status === 422) {
-            // Todo: Throw Error
-        }
+        
         return { status, data }
     }
 }

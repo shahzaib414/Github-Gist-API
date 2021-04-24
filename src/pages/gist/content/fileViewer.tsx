@@ -2,16 +2,12 @@ import React, { useEffect, useState } from "react";
 import { CodeBlock, dracula } from "react-code-blocks";
 import styled from "styled-components";
 import { Switch, FormControlLabel } from '@material-ui/core';
-import { GistFile } from "types/github";
+import { GistFile, File } from "types/github";
+import { GithubGistAPI } from "api";
 
 
 interface Props {
     files: GistFile
-}
-
-interface File {
-    content: string;
-    language: string;
 }
 
 const StyledDiv = styled.div`
@@ -19,51 +15,53 @@ const StyledDiv = styled.div`
     margin-bottom: 10px;
 `;
 
+const CodeBlockWrapper = styled.div`
+margin-top: 20px;
+`;
 const FileViewer = ({ files }: Props) => {
+    const api = new GithubGistAPI();
     const [filesContent, setFilesContent] = useState<File[]>([]);
-    const [showFiles, setShowFiles] = useState<boolean[]>([]);
+    const [showFiles, setShowFiles] = useState<boolean>(false);
 
     useEffect(() => {
-        filesContent.length === 0 && Object.keys(files).map(async f => {
-            const fileContent = await (await fetch(files[f].raw_url)).text();
-            setFilesContent(filesContent.concat([{ content: fileContent, language: files[f].language }]))
-            console.log(filesContent)
-        })
-    }, [])
+        fetchFilesContent(files)
+    }, [files])
+
+    const fetchFilesContent = async (files: GistFile) => {
+        const res = await api.getFilesContent(files);
+        setFilesContent(res)
+    }
 
     const handleChange = (event: any) => {
-        const states = [...showFiles];
-        states[parseInt(event.target.name)] = !states[parseInt(event.target.name)]
-        setShowFiles(states)
+        setShowFiles(!showFiles)
     }
 
     const ViewerWrapper = () => {
         return filesContent.map((c, index) => {
-            return <div>
-                <FormControlLabel
+            return <CodeBlockWrapper>
+                {showFiles && <CodeBlock
                     key={index}
-                    control={
-                        <Switch
-                            checked={(showFiles[index]) || false}
-                            onChange={handleChange}
-                            name={`${index}`}
-                            color="primary"
-                            key={index}
-                        />
-                    }
-                    label="Show File"
-                />
-                {showFiles[index] && <CodeBlock
                     text={c.content}
                     language={c.language}
                     showLineNumbers={true}
                     theme={dracula} />}
-            </div>
+            </CodeBlockWrapper>
         }
         )
     }
 
     return <StyledDiv>
+        <FormControlLabel
+            control={
+                <Switch
+                    checked={(showFiles) || false}
+                    onChange={handleChange}
+                    name="showFiles"
+                    color="primary"
+                />
+            }
+            label="Show File"
+        />
         {ViewerWrapper()}
     </StyledDiv>
 
