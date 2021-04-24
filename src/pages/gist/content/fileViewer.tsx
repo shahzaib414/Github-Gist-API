@@ -51,7 +51,7 @@ const FileViewer = ({ files }: Props) => {
                             key={index}
                         />
                     }
-                    label="Primary"
+                    label="Show File"
                 />
                 {showFiles[index] && <CodeBlock
                     text={c.content}
