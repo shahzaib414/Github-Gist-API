@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import styled from "styled-components";
 import { TextField, Button } from "@material-ui/core"
 
-const Container = styled.div`
+const StyledDiv = styled.div`
 justify-content: center;
 display: flex;
 
@@ -25,17 +25,17 @@ interface Props {
 const Search = ({ searchButtonText, searchPlaceHolder, onClick }: Props) => {
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const placeholder = searchPlaceHolder || 'GitHub username';
+    const placeholder = searchPlaceHolder || 'Search';
 
     const onTextChangeHanlder = (value: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSearchQuery(value.target.value)
     };
-    return <Container>
-        <TextField id="standard-basic" label={placeholder} value={searchQuery} onChange={onTextChangeHanlder}/>
+    return <StyledDiv>
+        <TextField id="standard-basic" label={placeholder} value={searchQuery} onChange={onTextChangeHanlder} />
         <Button variant="contained" color="primary" onClick={() => onClick(searchQuery)}>
             {searchButtonText || `Search`}
         </Button>
-    </Container>
+    </StyledDiv>
 }
 
 export default Search;

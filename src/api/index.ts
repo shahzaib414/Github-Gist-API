@@ -1,1 +1,1 @@
-export { default as GithubAPI } from "./githubAPI";
+export { default as GithubGistAPI } from "./githubGistAPI";

@@ -1,6 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Search } from "../../componnets";
+import { Search } from "components";
+import { GithubGistAPI } from "api";
+import { Gist } from "types/github";
+import Content from "./content"
 
 
 const Layout = styled.div`
@@ -20,13 +23,30 @@ const ContentContainer = styled.div`
 `;
 
 const GistView = () => {
-    const onSearh = useCallback((value) => {
+    const [gists, setGists] = useState<Gist[]>([]);
+    const [user, setUser] = useState<string>();
 
-    }, []);
+    const fetchUser = async (user: string) => {
+        const api = new GithubGistAPI();
+        const { status, data } = await api.getGistByUser(user);
+        if (status === 200) {
+            setGists(data)
+        }
+    }
+    
+    useEffect(() => {
+        if (user) fetchUser(user);
+    }, [user])
+
+
+    const onSearh = (value: string) => {
+        setUser(value)
+    }
     return <Layout>
         <Header> Gist Viewer </Header>
         <ContentContainer>
             <Search onClick={onSearh} />
+            <Content gists={gists}/>
         </ContentContainer>
     </Layout>
 }
