@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface Props {
     children: React.ReactNode;
     title?: string
+    onClick?: () => void
 }
 
 const CardView = styled.div`
@@ -25,7 +26,7 @@ const CardContent = styled.div`
     flex-direction: column
 `; 
 
-const Card = ({ children, title }: Props) => {
+const Card = ({ children, title, onClick }: Props) => {
     return <CardView>
         <CardTitle>
             {title}

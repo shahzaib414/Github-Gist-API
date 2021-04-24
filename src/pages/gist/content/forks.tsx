@@ -44,7 +44,7 @@ const Forks = ({ gistId }: Props) => {
 
     useEffect(() => {
         fetchForksByGistId(gistId);
-    })
+    }, [gistId])
 
     return <StyledDiv>
         <StyledText fontSize={14} fontWeight="bold"> Forked </StyledText>

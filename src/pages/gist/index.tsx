@@ -12,7 +12,8 @@ const Layout = styled.div`
 `;
 const Header = styled.div`
     margin-top: 30px;
-    font-size: 3rem;
+    font-size: 2.5rem;
+    font-weight: bold;
     text-align: center;
 `
 
