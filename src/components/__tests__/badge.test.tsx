@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Badge from "../Badge";
+import Badge from "../badge";
 
 test("Badge Component renders correctly", () => {
     const component = renderer.create(<Badge text="Typescript"/>)

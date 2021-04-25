@@ -1,3 +1,3 @@
-export { default as Search } from "./Search";
-export { default as Card } from "./Card";
-export { default as Badge } from "./Badge";
+export { default as Search } from "./search";
+export { default as Card } from "./card";
+export { default as Badge } from "./badge";
